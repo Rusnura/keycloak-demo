@@ -1,9 +1,18 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: 8081
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.boot.autoconfigure: INFO
+    org.springframework.web.client.RestTemplate: DEBUG
+
 spring:
-  application.name: ${APPLICATION_NAME:spring-security-keycloak}
-keycloak:
-  auth-server-url: http://localhost:8888/auth
-  realm: myproject
-  resource: myproject-app
-  public-client: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri : http://localhost:8888/realms/springboot

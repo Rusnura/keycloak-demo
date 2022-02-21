@@ -1,41 +1,23 @@
 package ru.tumasoff.keycloakdemo.controllers;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
 public class SimpleRestController {
-  @GetMapping("/anonymous")
-  public String getAnonymousInfo() {
-    return "Anonymous";
-  }
-
-  @GetMapping("/user")
-  @PreAuthorize("hasRole('USER')")
-  public String getUserInfo() {
-    return "user info";
-  }
-
-  @GetMapping("/admin")
-  @PreAuthorize("hasRole('ADMIN')")
-  public String getAdminInfo() {
-    return "admin info";
-  }
-
-  @GetMapping("/service")
-  @PreAuthorize("hasRole('SERVICE')")
-  public String getServiceInfo() {
-    return "service info";
-  }
-
-  @GetMapping("/me")
-  public Object getMe() {
-    final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return authentication.getName();
+  @GetMapping(value = "/employee/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<String> getEmployee(@AuthenticationPrincipal Jwt principal, @PathVariable String id) {
+    System.out.println(principal.toString());
+    System.out.println(principal.getClaimAsString("preferred_username"));
+    return ResponseEntity.ok("Ruslan Tumasov");
   }
 }
